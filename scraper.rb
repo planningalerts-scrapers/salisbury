@@ -8,16 +8,20 @@ def extract_from_p(contents, name)
 end
 
 def scrape_page(page)
+	
+	# needs error checking particularly for date closing.
+	# what if parse fails.
+
 	contents = page.search('div.span6')
 	record = {
 		"info_url" => page.uri.to_s,
-		"council_reference" => contents.search('h1').inner_text,
+		"council_reference" => contents.search('h1').inner_text.strip,
 		"comment_url" => page.uri.to_s,
 		"applicatant" => extract_from_p(contents,"Applicant:"),
-		"description" => contents.at('p:contains("Location:")').next_element.inner_text,
+		"description" => contents.at('p:contains("Location:")').next_element.inner_text.strip,
 		"address" => extract_from_p(contents,"Location:"),
 		"date_scraped" => Date.today.to_s,
-		"date_closing" => extract_from_p(contents,"Advertising closes ")
+		"date_closing" => Date.strptime(extract_from_p(contents,"Advertising closes "),"%d %b %Y"),
 	}
 
 	if (ScraperWiki.select("* from data where `council_reference`='#{record['council_reference']}'").empty? rescue true)
