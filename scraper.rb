@@ -2,7 +2,6 @@ require 'scraperwiki'
 require 'mechanize'
 
 base_url = "https://eservices.salisbury.sa.gov.au/ePathway/Production/Web"
-comment_url = "mailto:city@salisbury.sa.gov.au"
 
 agent = Mechanize.new
 
@@ -64,7 +63,6 @@ application_records = applications.collect do |application|
   application_record['date_received'] = Date.strptime(application[headers.index('Lodgement Date')], '%d/%m/%Y').to_s
   application_record['address'] = application[headers.index('Site Address')]
   application_record['date_scraped'] = Date.today.to_s
-  application_record['comment_url'] = comment_url
   if application_record['description'].strip == ''
     application_record['description'] = 'No description provided'
   end
