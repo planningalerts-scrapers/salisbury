@@ -19,17 +19,7 @@ while results_page
   count += 1
   puts "Parsing the results on page #{count}."
 
-  table = results_page.root.at_css('.ContentPanel')
-  scraper.extract_table_data_and_urls(table).each do |row|
-    data = scraper.extract_index_data(row)
-    record = {
-      'council_reference' => data[:council_reference],
-      'info_url' => scraper.base_url,
-      'description' => data[:description],
-      'date_received' => data[:date_received],
-      'address' => data[:address],
-      'date_scraped' => Date.today.to_s
-    }
+  scraper.scrape_index_page(results_page) do |record|
     EpathwayScraper.save(record)
   end
 
