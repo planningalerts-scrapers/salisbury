@@ -20,15 +20,14 @@ while results_page
   puts "Parsing the results on page #{count}."
 
   table = results_page.root.at_css('.ContentPanel')
-  headers = table.css('th').collect { |th| th.inner_text.strip }
-  applications = table.css('.ContentPanel, .AlternateContentPanel').each do |tr|
-    application = tr.css('td').collect { |td| td.inner_text.strip }
+  scraper.extract_table_data_and_urls(table).each do |row|
+    data = scraper.extract_index_data(row)
     record = {
-      'council_reference' => application[headers.index('Application Number')],
+      'council_reference' => data[:council_reference],
       'info_url' => "#{base_url}/default.aspx",
-      'description' => application[headers.index('Application Description')],
-      'date_received' => Date.strptime(application[headers.index('Lodgement Date')], '%d/%m/%Y').to_s,
-      'address' => application[headers.index('Site Address')],
+      'description' => data[:description],
+      'date_received' => data[:date_received],
+      'address' => data[:address],
       'date_scraped' => Date.today.to_s
     }
     EpathwayScraper.save(record)
