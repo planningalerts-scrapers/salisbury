@@ -34,11 +34,6 @@ while results_page
     EpathwayScraper.save(record)
   end
 
-  if count > 50  # safety precaution
-    puts "Stopping paging after #{count} pages."
-    break
-  end
-
   next_page_image = results_page.root.at_xpath("//td/input[contains(@src, 'nextPage')]")
   results_page = nil
   if next_page_image
