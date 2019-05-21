@@ -67,10 +67,8 @@ end
 
 puts "Updating the database."
 application_records.each do |application_record|
-  if application_record['council_reference'] != '' && application_record['address'] != ''  # avoid invalid records
-    ScraperWiki.save_sqlite(['council_reference'], application_record)
-    puts "Inserted: application \"" + application_record['council_reference'] + "\" with address \"" + application_record['address'] + "\" and description \"" + application_record['description'] + "\" into the database."
-  end
+  ScraperWiki.save_sqlite(['council_reference'], application_record)
+  puts "Inserted: application \"" + application_record['council_reference'] + "\" with address \"" + application_record['address'] + "\" and description \"" + application_record['description'] + "\" into the database."
 end
 
 puts "Complete."
