@@ -1,5 +1,4 @@
-require 'scraperwiki'
-require 'mechanize'
+require "epathway_scraper"
 
 base_url = "https://eservices.salisbury.sa.gov.au/ePathway/Production/Web"
 
@@ -35,10 +34,10 @@ while results_page
 
   table = results_page.root.at_css('.ContentPanel')
   headers = table.css('th').collect { |th| th.inner_text.strip }
-  applications += table.css('.ContentPanel, .AlternateContentPanel').collect do |tr| 
+  applications += table.css('.ContentPanel, .AlternateContentPanel').collect do |tr|
     tr.css('td').collect { |td| td.inner_text.strip }
   end
-  
+
   if count > 50  # safety precaution
     puts "Stopping paging after #{count} pages."
     break
