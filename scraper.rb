@@ -24,7 +24,7 @@ while results_page
     data = scraper.extract_index_data(row)
     record = {
       'council_reference' => data[:council_reference],
-      'info_url' => "#{base_url}/default.aspx",
+      'info_url' => scraper.base_url,
       'description' => data[:description],
       'date_received' => data[:date_received],
       'address' => data[:address],
