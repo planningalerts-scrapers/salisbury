@@ -53,13 +53,14 @@ end
 # Construct development application records that can be inserted into the database.
 
 application_records = applications.collect do |application|
-  application_record = {}
-  application_record['council_reference'] = application[headers.index('Application Number')]
-  application_record['info_url'] = "#{base_url}/default.aspx"
-  application_record['description'] = application[headers.index('Application Description')]
-  application_record['date_received'] = Date.strptime(application[headers.index('Lodgement Date')], '%d/%m/%Y').to_s
-  application_record['address'] = application[headers.index('Site Address')]
-  application_record['date_scraped'] = Date.today.to_s
+  application_record = {
+    'council_reference' => application[headers.index('Application Number')],
+    'info_url' => "#{base_url}/default.aspx",
+    'description' => application[headers.index('Application Description')],
+    'date_received' => Date.strptime(application[headers.index('Lodgement Date')], '%d/%m/%Y').to_s,
+    'address' => application[headers.index('Site Address')],
+    'date_scraped' => Date.today.to_s
+  }
   if application_record['description'].strip == ''
     application_record['description'] = 'No description provided'
   end
