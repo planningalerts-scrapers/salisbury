@@ -8,21 +8,11 @@ scraper = EpathwayScraper::Scraper.new(
 
 agent = scraper.agent
 
-puts "Retrieving the enquiry lists page."
 enquiry_lists_page = agent.get(scraper.base_url)
 
+enquiry_search_page = scraper.click_date_search_tab(enquiry_lists_page)
 # The Date tab defaults to a search range of the last 30 days.
-
-puts "Clicking the Date tab."
-enquiry_lists_form = enquiry_lists_page.forms.first
-enquiry_lists_form['__EVENTTARGET'] = 'ctl00$MainBodyContent$mGeneralEnquirySearchControl$mTabControl$tabControlMenu'
-enquiry_lists_form['__EVENTARGUMENT'] = '1'
-enquiry_search_page = agent.submit(enquiry_lists_form)
-
-puts "Clicking the Search button."
-enquiry_search_form = enquiry_search_page.forms.first
-button = enquiry_search_form.button_with(:value => "Search")
-results_page = agent.submit(enquiry_search_form, button)
+results_page = scraper.click_search_on_page(enquiry_search_page)
 
 count = 0
 applications = []
@@ -67,8 +57,5 @@ end
 
 puts "Updating the database."
 application_records.each do |application_record|
-  ScraperWiki.save_sqlite(['council_reference'], application_record)
-  puts "Inserted: application \"" + application_record['council_reference'] + "\" with address \"" + application_record['address'] + "\" and description \"" + application_record['description'] + "\" into the database."
+  EpathwayScraper.save(application_record)
 end
-
-puts "Complete."
