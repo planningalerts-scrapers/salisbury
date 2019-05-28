@@ -9,6 +9,9 @@ scraper = EpathwayScraper::Scraper.new(
 agent = scraper.agent
 
 enquiry_lists_page = agent.get(scraper.base_url)
+# Fake that we're running javascript by picking out the javascript redirect
+redirected_url = enquiry_lists_page.body.match(/window.location.href='(.*)';/)[1]
+enquiry_lists_page = agent.get(redirected_url)
 
 enquiry_search_page = scraper.click_date_search_tab(enquiry_lists_page)
 # The Date tab defaults to a search range of the last 30 days.
